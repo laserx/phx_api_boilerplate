@@ -79,7 +79,7 @@ defmodule PhxApiBoilerplate.MixProject do
       # Logs
       {:log_viewer, "~> 0.1.0", only: :dev},
 
-      # docs
+      # Docs
       {:phoenix_swagger, "~> 0.8"},
       {:ex_json_schema, "~> 0.5"},
       {:ex_doc, "~> 0.21", only: :dev, runtime: false}

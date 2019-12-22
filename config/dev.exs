@@ -2,9 +2,10 @@ use Mix.Config
 
 # Configure your database
 config :phx_api_boilerplate, PhxApiBoilerplate.Repo,
-  username: "postgres",
-  password: "postgres",
-  database: "phx_api_boilerplate_dev",
+  username: System.get_env("DB_USER") || "postgres",
+  password: System.get_env("DB_PASSWD") || "postgres",
+  database: System.get_env("DB_NAME") || "phx_api_boilerplate_dev",
+  port: System.get_env("DB_PORT") || 5432,
   hostname: "localhost",
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
