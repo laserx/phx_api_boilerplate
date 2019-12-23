@@ -17,7 +17,7 @@ defmodule Mix.Tasks.Pab.Setup do
   @orig_module_name "PhxApiBoilerplate"
   @orig_project_name "phx_api_boilerplate"
 
-  @scan_paths ~w[./lib/** ./priv/** ./test/** ./config/** mix.exs README.md]
+  @scan_paths ~w[./lib/** ./priv/** ./test/** ./config/** mix.exs README.md .env.example .gitignore]
   @exclude_files ~w[lib/mix/tasks/pab.setup.ex]
 
   def run(all_args) do
@@ -47,6 +47,7 @@ defmodule Mix.Tasks.Pab.Setup do
 
     paths = scan_files()
     rename_module(paths, target_module_name)
+    rename_module(paths, target_project_name, @orig_project_name)
     rename_project(paths, target_project_name)
   end
 
