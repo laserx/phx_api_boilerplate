@@ -75,7 +75,7 @@ defmodule Mix.Tasks.Pab.Setup do
     Mix.shell().info("rename module from #{orig} to #{targ}")
 
     for p <- paths do
-      unless File.dir?(p) && Enum.member?(@exclude_files, p) do
+      unless File.dir?(p) or Enum.member?(@exclude_files, p) do
         contents =
           File.stream!(p)
           |> Enum.map(&String.replace(&1, orig, targ))
