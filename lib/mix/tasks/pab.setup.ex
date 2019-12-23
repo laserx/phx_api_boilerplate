@@ -10,7 +10,7 @@ defmodule Mix.Tasks.Pab.Setup do
   @orig_project_name "phx_api_boilerplate"
 
   @scan_paths ~w[./lib/** ./priv/** ./test/** ./config/** mix.exs README.md]
-  @exclude_files ~w[/lib/mix/tasks/pab.setup.ex]
+  @exclude_files ~w[lib/mix/tasks/pab.setup.ex]
 
   def run(all_args) do
     {opts, args, _} =
