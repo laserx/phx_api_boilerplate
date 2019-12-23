@@ -55,19 +55,18 @@ defmodule Mix.Tasks.Pab.Setup do
 
     paths = Enum.sort_by(paths, &String.length/1, &>=/2)
 
-    for p <- paths do
-      case Path.split(p) do
-        any ->
-          if List.last(any)
-             |> String.contains?(orig) do
-            try do
-              path_tail = List.last(any) |> String.replace(orig, targ)
-              targ_path = List.delete_at(any, -1) |> List.insert_at(-1, path_tail) |> Path.join()
-              File.rename!(p, targ_path)
-            rescue
-              _ -> Mix.shell().info("rename project failed at #{p}")
-            end
-          end
+    for path <- paths do
+      p = Path.split(path)
+      last_p = List.last(p)
+
+      if String.contains?(last_p, orig) do
+        try do
+          path_tail = last_p |> String.replace(orig, targ)
+          targ_path = List.delete_at(p, -1) |> List.insert_at(-1, path_tail) |> Path.join()
+          File.rename!(path, targ_path)
+        rescue
+          _ -> Mix.shell().info("rename project failed at #{path}")
+        end
       end
     end
   end
@@ -76,19 +75,13 @@ defmodule Mix.Tasks.Pab.Setup do
     Mix.shell().info("rename module from #{orig} to #{targ}")
 
     for p <- paths do
-      case File.dir?(p) do
-        true ->
-          nil
+      unless File.dir?(p) && Enum.member?(@exclude_files, p) do
+        contents =
+          File.stream!(p)
+          |> Enum.map(&String.replace(&1, orig, targ))
+          |> Enum.join("")
 
-        false ->
-          unless Enum.member?(@exclude_files, p) do
-            contents =
-              File.stream!(p)
-              |> Enum.map(&String.replace(&1, orig, targ))
-              |> Enum.join("")
-
-            File.write!(p, contents)
-          end
+        File.write!(p, contents)
       end
     end
   end
