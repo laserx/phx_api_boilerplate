@@ -1,6 +1,14 @@
 defmodule Mix.Tasks.Pab.Setup do
   @moduledoc """
   This is used to finish new project setup, include rename module and files
+
+  ## Usage
+  wip
+
+  ## Options
+  * `--module`, `-m` set project module name
+
+  ## Example
   """
   use Mix.Task
 
@@ -37,14 +45,15 @@ defmodule Mix.Tasks.Pab.Setup do
       Keyword.get(opts, :module) ||
         String.split(target_project_name, "_") |> Enum.map_join("", &String.capitalize(&1))
 
-    rename_module(target_module_name)
-    rename_project(target_project_name)
+    paths = scan_files()
+    rename_module(paths, target_module_name)
+    rename_project(paths, target_project_name)
   end
 
-  defp rename_project(targ, orig \\ @orig_project_name) do
+  defp rename_project(paths, targ, orig \\ @orig_project_name) do
     Mix.shell().info("rename project from #{orig} to #{targ}")
 
-    paths = Enum.sort_by(scan_files(), &String.length/1, &>=/2)
+    paths = Enum.sort_by(paths, &String.length/1, &>=/2)
 
     for p <- paths do
       case Path.split(p) do
@@ -63,10 +72,8 @@ defmodule Mix.Tasks.Pab.Setup do
     end
   end
 
-  defp rename_module(targ, orig \\ @orig_module_name) do
+  defp rename_module(paths, targ, orig \\ @orig_module_name) do
     Mix.shell().info("rename module from #{orig} to #{targ}")
-
-    paths = scan_files()
 
     for p <- paths do
       case File.dir?(p) do
