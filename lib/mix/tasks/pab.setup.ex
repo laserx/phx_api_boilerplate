@@ -46,12 +46,12 @@ defmodule Mix.Tasks.Pab.Setup do
         String.split(target_project_name, "_") |> Enum.map_join("", &String.capitalize(&1))
 
     paths = scan_files()
-    rename_module(paths, target_module_name)
-    rename_module(paths, target_project_name, @orig_project_name)
-    rename_project(paths, target_project_name)
+    modify_content(paths, target_module_name)
+    modify_content(paths, target_project_name, @orig_project_name)
+    modify_path(paths, target_project_name)
   end
 
-  defp rename_project(paths, targ, orig \\ @orig_project_name) do
+  defp modify_path(paths, targ, orig \\ @orig_project_name) do
     Mix.shell().info("rename project from #{orig} to #{targ}")
 
     paths = Enum.sort_by(paths, &String.length/1, &>=/2)
@@ -72,7 +72,7 @@ defmodule Mix.Tasks.Pab.Setup do
     end
   end
 
-  defp rename_module(paths, targ, orig \\ @orig_module_name) do
+  defp modify_content(paths, targ, orig \\ @orig_module_name) do
     Mix.shell().info("rename module from #{orig} to #{targ}")
 
     for p <- paths do

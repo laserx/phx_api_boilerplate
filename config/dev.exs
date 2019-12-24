@@ -56,3 +56,20 @@ config :phoenix, :stacktrace_depth, 20
 
 # Initialize plugs at runtime for faster development compilation
 config :phoenix, :plug_init_mode, :runtime
+
+# Setup log_viewer
+config :logger,
+  backends: [{LogViewer.Logger, []}, :console]
+
+config :log_viewer, standalone: false
+
+config :phx_api_boilerplate, PhxApiBoilerplateWeb.Endpoint,
+  http: [
+    dispatch: [
+      {:_,
+       [
+         {"/log_viewer/websocket", LogViewer.WebSocketHandler, []},
+         {:_, Phoenix.Endpoint.Cowboy2Handler, {PhxApiBoilerplateWeb.Endpoint, []}}
+       ]}
+    ]
+  ]

@@ -8,4 +8,7 @@ defmodule PhxApiBoilerplateWeb.Router do
   scope "/api", PhxApiBoilerplateWeb do
     pipe_through :api
   end
+
+  # Route for Log Viewer
+  forward("/log_viewer", LogViewer.Router)
 end
